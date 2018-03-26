@@ -1,5 +1,5 @@
 """
-MacGyver Labyrinthe Game
+MacGyver Labyrinth Game
 
 MacGyver must collect 3 items in order to escape from the Labyrinthe
 while avoiding a contact with the gardien.
