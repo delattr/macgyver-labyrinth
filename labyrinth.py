@@ -107,7 +107,7 @@ while done:
         go = 1
         while go:
             for event in pygame.event.get():
-                text = font.render('You loose!!', True, (255, 255, 255))
+                text = font.render('You lose!!', True, (255, 255, 255))
                 window.fill((0, 0, 0))
                 window.blit(text, ((screen_size - text.get_width()) // 2,
                                    (screen_size - text.get_height()) // 2))
