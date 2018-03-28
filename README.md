@@ -1,7 +1,7 @@
 MacGyver Labyrinth Game
 
 MacGyver must collect 3 items in order to escape from the Labyrinthe
-while avoiding a contact with the gardien.
+while avoiding a contact with the guard.
 
-Game ends if MacGyver collects all items and escapes the labyrinthe
-or MacGyver and the guard make a contanct.
+Game ends if MacGyver collects all items and escapes the labyrinth
+or MacGyver make a contanct with the guard before collecting all items.
