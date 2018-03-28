@@ -16,10 +16,13 @@ from classes import *
 
 # Initialize pygame
 pygame.init()
+pygame.font.init()
 
 # Window size
 window = pygame.display.set_mode((screen_size, screen_size + sprite_size))
 
+# Setting a font type
+font = pygame.font.SysFont('OCR A Std', 72)
 # Window title
 pygame.display.set_caption('MacGyver Labyrinthe')
 
@@ -61,19 +64,11 @@ while done:
         elif event.type == KEYDOWN and event.key == K_LEFT:
             myplayer.move('left')
 
-    # Game closes if MacGyver finds exit
-    if maze.exit_position == myplayer.player_position and maze.score == 3:
-        done = 0
-    # Game closes if MacGyver makes a contact with the guard
-    if maze.gardien_position == myplayer.player_position and maze.score != 3:
-        done = 0
-
     # new positions to be displayed on screen
     window.blit(fond, (0, 0))
     maze.wall(window)
     maze.displayItems(myplayer, window)
     window.blit(player, myplayer.player_position)
-
     # Guard disapears if MacGyver make a contact
     if maze.gardien_position == myplayer.player_position:
         guard_killed = 1
@@ -81,3 +76,37 @@ while done:
         maze.guard(window)
     # refresh screen
     pygame.display.flip()
+
+    # Game closes if MacGyver finds exit
+    if maze.exit_position == myplayer.player_position and maze.score == 3:
+        go = 1
+        while go:
+            for event in pygame.event.get():
+                text = font.render('You Win!!', True, (0, 0, 0))
+                window.fill((255, 255, 255))
+                window.blit(text, ((screen_size - text.get_width()) // 2,
+                                   (screen_size - text.get_height()) // 2))
+                pygame.display.flip()
+                if event.type == KEYDOWN and event.key == K_ESCAPE:
+                    go = 0
+                elif event.type == QUIT:
+                    go = 0
+        done = 0
+
+    # Game closes if MacGyver makes a contact with the guard
+    if maze.gardien_position == myplayer.player_position and maze.score != 3:
+        go = 1
+        while go:
+            for event in pygame.event.get():
+                text = font.render('You loose!!', True, (255, 255, 255))
+                window.fill((0, 0, 0))
+                window.blit(text, ((screen_size - text.get_width()) // 2,
+                                   (screen_size - text.get_height()) // 2))
+                pygame.display.flip()
+
+                if event.type == KEYDOWN and event.key == K_ESCAPE:
+                    go = 0
+                elif event.type == QUIT:
+                    go = 0
+
+        done = 0
