@@ -32,13 +32,22 @@ fond = pygame.transform.scale(fond, (screen_size, screen_size))
 player = pygame.image.load(macgyver).convert_alpha()
 player = pygame.transform.scale(player, (sprite_size, sprite_size))
 
-# Set class instances
+# Generate Maze
 maze = Maze('n1')
 maze.generate()
 maze.wall(window)
-maze.item()
+
+# Calculate position of player
 myplayer = Player(maze)
-maze.guard(window)
+
+# Calculate position of guard
+guard = Guard(maze)
+guard.guardPosition(window)
+
+# Calculate Item postions
+item = Item(maze)
+item.itemPosition()
+item.displayItems(myplayer, window)
 
 # Guard kill count
 guard_killed = 0
@@ -67,18 +76,18 @@ while done:
     # new positions to be displayed on screen
     window.blit(fond, (0, 0))
     maze.wall(window)
-    maze.displayItems(myplayer, window)
+    item.displayItems(myplayer, window)
     window.blit(player, myplayer.player_position)
     # Guard disapears if MacGyver make a contact
-    if maze.gardien_position == myplayer.player_position:
+    if guard.gardien_position == myplayer.player_position:
         guard_killed = 1
     if guard_killed != 1:
-        maze.guard(window)
+        guard.guardPosition(window)
     # refresh screen
     pygame.display.flip()
 
     # Game closes if MacGyver finds exit
-    if maze.exit_position == myplayer.player_position and maze.score == 3:
+    if maze.exit_position == myplayer.player_position and item.score == 3:
         go = 1
         while go:
             for event in pygame.event.get():
@@ -94,7 +103,7 @@ while done:
         done = 0
 
     # Game closes if MacGyver makes a contact with the guard
-    if maze.gardien_position == myplayer.player_position and maze.score != 3:
+    if guard.gardien_position == myplayer.player_position and item.score != 3:
         go = 1
         while go:
             for event in pygame.event.get():

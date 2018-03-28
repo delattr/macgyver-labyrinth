@@ -11,17 +11,7 @@ class Maze:
         self.sturcture = []
         self.corridor = []
         self.exit_position = 0
-        self.guard_position = 0
         self.starting_position = 0
-        self.item_position = []
-        self.items_picked_up = []
-        self.score = 0
-
-        item1 = pygame.image.load(arrow).convert_alpha()
-        item2 = pygame.image.load(tube).convert_alpha()
-        item3 = pygame.image.load(ether).convert_alpha()
-
-        self.item_name = [item1, item2, item3]
 
     # Generate maze by reading the text file
     def generate(self):
@@ -61,11 +51,18 @@ class Maze:
                 column += 1
             row += 1
 
-    # Determine position of the guard
-    def guard(self, window):
 
-        row = int(self.exit_position[1] / sprite_size)
-        column = int(self.exit_position[0] / sprite_size)
+# Determine position of the guard
+class Guard:
+
+    def __init__(self, maze):
+        self.maze = maze
+        self.guard_position = 0
+
+    def guardPosition(self, window):
+
+        row = int(self.maze.exit_position[1] / sprite_size)
+        column = int(self.maze.exit_position[0] / sprite_size)
 
         x_axis = int(column * sprite_size)
         y_axis = int(row * sprite_size)
@@ -79,19 +76,19 @@ class Maze:
 
         # Find coordiates of blocks around the exit and add them to a dictioanry
         try:
-            possible_position['up'] = self.structure[up][column]
+            possible_position['up'] = self.maze.structure[up][column]
         except IndexError:
             pass
         try:
-            possible_position['down'] = self.structure[down][column]
+            possible_position['down'] = self.maze.structure[down][column]
         except IndexError:
             pass
         try:
-            possible_position['left'] = self.structure[row][left]
+            possible_position['left'] = self.maze.structure[row][left]
         except IndexError:
             pass
         try:
-            possible_position['right'] = self.structure[row][right]
+            possible_position['right'] = self.maze.structure[row][right]
         except IndexError:
             pass
         # Checking for blocks which has value of '0'
@@ -102,32 +99,44 @@ class Maze:
         if gardien_case == 'up':
             y_axis -= sprite_size
             self.gardien_position = (x_axis, y_axis)
-            self.corridor.remove(self.gardien_position)
 
         elif gardien_case == 'down':
             y_axis += sprite_size
             self.gardien_positon = (x_axis, y_axis)
-            self.corridor.remove(self.gardien_position)
 
         elif gardien_case == 'right':
             x_axis += sprite_size
             self.gardien_position = (x_axis, y_axis)
-            self.corridor.remove(self.gardien_position)
 
         elif gardien_case == 'left':
             x_axis -= sprite_size
             self.gardien_position = (x_axis, y_axis)
-            self.corridor.remove(self.gardien_position)
 
+        self.maze.corridor.remove(self.gardien_position)
         mygard = pygame.image.load(gardien).convert_alpha()
         window.blit(mygard, self.gardien_position)
 
-    # Randomly reate postion of items
-    def item(self):
+
+# Randomly reate postion of items
+class Item:
+
+    def __init__(self, maze):
+        self.maze = maze
+        self.score = 0
+
+        item1 = pygame.image.load(arrow).convert_alpha()
+        item2 = pygame.image.load(tube).convert_alpha()
+        item3 = pygame.image.load(ether).convert_alpha()
+
+        self.item_name = [item1, item2, item3]
+        self.item_position = []
+        self.items_picked_up = []
+
+    def itemPosition(self):
         for i in range(3):
-            item = random.choice(self.corridor)
+            item = random.choice(self.maze.corridor)
             self.item_position.append(item)
-            self.corridor.remove(item)
+            self.maze.corridor.remove(item)
 
     def displayItems(self, player, window):
 
@@ -147,14 +156,15 @@ class Maze:
                 # tracks the score
                 self.score += 1
                 item_obtained = True
-        # removes item obtained from the lists
+        # Removes item obtained from the lists
         if item_obtained:
             self.item_position.remove(del_item_position)
             self.item_name.remove(del_item_name)
 
+        # Display Items obtained on score board
         for i in range(len(self.items_picked_up)):
             self.window.blit(self.items_picked_up[i], (sprite_size * i, screen_size))
-
+        # Displays a finish.png on score board
         if len(self.items_picked_up) == 3:
             end = pygame.image.load(finish).convert()
             self.window.blit(end, (sprite_size * 3, screen_size))
