@@ -10,7 +10,7 @@ or MacGyver and the guard make a contanct.
 
 import pygame
 from pygame.locals import *
-from constantes import *
+from constants import *
 from classes import *
 
 # Initialize pygame
