@@ -1,7 +1,7 @@
 import random
 import pygame
 from pygame.locals import *
-from constantes import *
+from constants import *
 
 
 class Maze:
