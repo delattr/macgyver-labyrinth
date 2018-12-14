@@ -7,7 +7,7 @@ def generate_maze():
     block = 'x'
     cell = 'o'
     start = 's'
-    end = 'e'
+
     visited_cells = set()
     unvisited_cells = set()
     stack = []
@@ -25,7 +25,7 @@ def generate_maze():
                 line.append(block)
         structure.append(line)
     structure[0][1] = start
-    structure[13][14] = end
+
 
     #create unvisited cells
 
@@ -74,11 +74,7 @@ def generate_maze():
              # Make it the current cell
              current_cell = last_cell
 
-    with open('n1', 'w') as text_file:
-        for line in structure:
-            for character in line:
-                text_file.write(character)
-            text_file.write('\n')
+    return structure
 
 if __name__ == '__main__':
     generate_maze()

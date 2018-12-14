@@ -31,24 +31,24 @@ while 1:
     # Load images
     fond = pygame.image.load(FOND).convert()
     fond = pygame.transform.scale(fond, (SCREEN_SIZE, SCREEN_SIZE))
-    player = pygame.image.load(MACGYVER).convert_alpha()
-    player = pygame.transform.scale(player, (SPRITE_SIZE, SPRITE_SIZE))
-    mygard = pygame.image.load(GARDIEN).convert_alpha()
-    mygard = pygame.transform.scale(mygard, (SPRITE_SIZE, SPRITE_SIZE))
+    macgyver = pygame.image.load(MACGYVER).convert_alpha()
+    macgyver = pygame.transform.scale(macgyver, (SPRITE_SIZE, SPRITE_SIZE))
+    medoc = pygame.image.load(GARDIEN).convert_alpha()
+    medoc = pygame.transform.scale(medoc, (SPRITE_SIZE, SPRITE_SIZE))
+    block = pygame.image.load(MUR).convert()
 
-    # Generate Maze
-    generate_maze()
-    maze = Maze('n1')
-    maze.generate()
+    # auto-generate Maze
+    structure = generate_maze()
+    maze = Maze(structure)
     # Create Wall
-    maze.wall(window)
+    maze.blit_walls(window)
 
     # Create MacGyver
     myplayer = Player(maze)
 
     # Create Medoc
     guard = Guard(maze)
-    guard.guardPosition(window)
+    guard.set_guard_position()
 
     # Randomly position items in the maze
     item = Item(maze)
@@ -60,7 +60,9 @@ while 1:
     # Ture  condition for wile loop
     done = 1
     direction = None
+    count = 0
     while done:
+        count += 1
         x = myplayer.player_position[0]
         y = myplayer.player_position[1]
         # pygame.time.Clock().tick(10)
@@ -86,30 +88,54 @@ while 1:
                     event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT):
                     direction = None
         myplayer.move(direction)
-        # new positions to be displayed on screen
+        if count % 3:
+            guard.set_guard_position()
+            count -= 2
+        # New positions to be displayed on screen
         window.blit(fond, (0, 0))
-        maze.wall(window)
+        maze.blit_walls(window)
         item.displayItems(myplayer, window)
-        window.blit(player, myplayer.player_position)
-
-        # Guard disapears if MacGyver make a contact
-        if guard.gardien_position == myplayer.player_position:
+        window.blit(macgyver, myplayer.player_position)
+        # Hide Medoc if he contacts with MacGyver
+        if guard.guard_position == myplayer.player_position:
             guard_killed = 1
 
-        if guard_killed != 1:
-            window.blit(mygard, guard.gardien_position)
+        if not guard_killed:
+            # Hide exit
+            window.blit(medoc, guard.guard_position)
 
-         # refresh screen
-        pygame.display.update()
+        pygame.display.flip()
         pygame.time.Clock().tick(10)
+
+        if guard.guard_position == myplayer.player_position and item.score != 3:
+            go = 1
+            # Only display Medoc if he wins
+            window.blit(medoc, guard.guard_position)
+            while go:
+                for event in pygame.event.get():
+                    text = font.render('YOU LOST!!', True, (255, 11, 21))
+
+                    window.blit(text, ((SCREEN_SIZE - text.get_width()) // 2,
+                                       (SCREEN_SIZE - text.get_height()) // 2))
+                    pygame.display.flip()
+
+                    if event.type == KEYDOWN and event.key == K_RETURN:
+                        go = 0
+                    elif event.type == QUIT:
+                        sys.exit()
+            done = 0
+        # create exit
+        if guard_killed and item.score == 3:
+            strucutre = maze.structure[13][14] = 'e'
+            Maze(structure)
 
         # Game closes if MacGyver finds exit
         if maze.exit_position == myplayer.player_position and item.score == 3:
             go = 1
             while go:
                 for event in pygame.event.get():
-                    text = font.render('You Win!!', True, (0, 0, 0))
-                    window.fill((255, 255, 255))
+                    text = font.render('YOU WON!!', True, (11, 19, 255))
+
                     window.blit(text, ((SCREEN_SIZE - text.get_width()) // 2,
                                        (SCREEN_SIZE - text.get_height()) // 2))
                     pygame.display.flip()
@@ -119,22 +145,8 @@ while 1:
                         sys.exit()
 
             done = 0
-        # Game closes if MacGyver makes a contact with the guard
-        if guard.gardien_position == myplayer.player_position and item.score != 3:
-            go = 1
-            while go:
-                for event in pygame.event.get():
-                    text = font.render('You lose!!', True, (255, 255, 255))
-                    window.fill((0, 0, 0))
-                    window.blit(text, ((SCREEN_SIZE - text.get_width()) // 2,
-                                       (SCREEN_SIZE - text.get_height()) // 2))
-                    pygame.display.flip()
 
-                    if event.type == KEYDOWN and event.key == K_RETURN:
-                        go = 0
-                    elif event.type == QUIT:
-                        sys.exit()
-            done = 0
+
 
 
 
