@@ -12,6 +12,7 @@ import pygame
 from pygame.locals import *
 from constants import *
 from classes import *
+from maze import generate_maze
 
 # Initialize pygame
 pygame.init()
@@ -32,19 +33,22 @@ player = pygame.image.load(MACGYVER).convert_alpha()
 player = pygame.transform.scale(player, (SPRITE_SIZE, SPRITE_SIZE))
 mygard = pygame.image.load(GARDIEN).convert_alpha()
 mygard = pygame.transform.scale(mygard, (SPRITE_SIZE, SPRITE_SIZE))
+
 # Generate Maze
+generate_maze()
 maze = Maze('n1')
 maze.generate()
+# Create Wall
 maze.wall(window)
 
-# Calculate position of player
+# Create MacGyver
 myplayer = Player(maze)
 
-# Calculate position of guard
+# Create Medoc
 guard = Guard(maze)
 guard.guardPosition(window)
 
-# Calculate Item postions
+# Randomly position items in the maze
 item = Item(maze)
 item.itemPosition()
 item.displayItems(myplayer, window)

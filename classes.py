@@ -43,7 +43,7 @@ class Maze:
                 elif letter == 's':  # s = starting postion
                     window.blit(depart, (x, y))
                     self.starting_position = (x, y)
-                elif letter == '0':  # 0 = corridor
+                elif letter == 'o':  # 0 = corridor
                     self.corridor.append((x, y))
                 elif letter == 'e':
                     window.blit(sortie, (x, y))
@@ -92,8 +92,8 @@ class Guard:
         except IndexError:
             pass
 
-        # Checking for blocks which has value of '0'
-        check_position = {k: v for k, v in possible_position.items() if v == '0'}
+        # Checking for blocks which has value of 'o'
+        check_position = {k: v for k, v in possible_position.items() if v == 'o'}
 
         # Selects a random block by passing a key from the check_position dictionary
         gardien_case = random.choice(list(check_position.keys()))
