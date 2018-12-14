@@ -213,3 +213,4 @@ class Player:
                 if self.maze.structure[row][column - 1] != "x":
                     x_axis -= SPRITE_SIZE
                     self.player_position = (x_axis, y_axis)
+        return self.player_position

@@ -1,7 +1,7 @@
 # constante variables
-SPRITE_SIZE = 32
-TILE = 15
-SCREEN_SIZE = int(TILE * SPRITE_SIZE)
+SPRITE_SIZE = 32 # image size in pixels
+TILE = 15        # number of sprites per row
+SCREEN_SIZE = int(TILE * SPRITE_SIZE) # toal length of screen size in pixels
 START = 'images/depart.png'
 FOND = 'images/fond.jpg'
 MUR = 'images/mur.png'
