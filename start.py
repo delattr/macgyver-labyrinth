@@ -15,138 +15,146 @@ from classes import *
 from maze import generate_maze
 
 
+# Initialize pygame
+pygame.init()
+pygame.font.init()
+# Window size
+window = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE + SPRITE_SIZE))
+# Window title
+pygame.display.set_caption('MacGyver Labyrinthe')
+
+# Load images
+fond = pygame.image.load(FOND).convert()
+macgyver = pygame.image.load(MACGYVER).convert_alpha()
+macgyver = pygame.transform.scale(macgyver, (SPRITE_SIZE, SPRITE_SIZE))
+medoc = pygame.image.load(GARDIEN).convert_alpha()
+medoc = pygame.transform.scale(medoc, (SPRITE_SIZE, SPRITE_SIZE))
+block = pygame.image.load(MUR).convert()
+sirynge = pygame.image.load(SIRYNGE).convert()
+win = pygame.image.load(WIN).convert()
+loose = pygame.image.load(LOOSE).convert()
+welcome = pygame.image.load(WELCOME).convert()
+
+# Load music
+pygame.mixer.init()
+pygame.mixer.music.load(MUSIC)
+#play music
+pygame.mixer.music.play(loops=-1)
+
+# Welcome screen
 while 1:
-    # Initialize pygame
-    pygame.init()
-    pygame.font.init()
+    initiate = 0
+    window.blit(welcome, (0,0))
+    pygame.display.flip()
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                mode = 'easy'
+                initiate = 1
+            elif event.key == pygame.K_2:
+                mode = 'hard'
+                initiate = 1
+        if event.type == pygame.QUIT:
+            sys.exit()
 
-    # Window size
-    window = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE + SPRITE_SIZE))
-
-    # Setting a font type
-    font = pygame.font.SysFont('OCR A Std', 72)
-    # Window title
-    pygame.display.set_caption('MacGyver Labyrinthe')
-
-    # Load images
-    fond = pygame.image.load(FOND).convert()
-    fond = pygame.transform.scale(fond, (SCREEN_SIZE, SCREEN_SIZE))
-    macgyver = pygame.image.load(MACGYVER).convert_alpha()
-    macgyver = pygame.transform.scale(macgyver, (SPRITE_SIZE, SPRITE_SIZE))
-    medoc = pygame.image.load(GARDIEN).convert_alpha()
-    medoc = pygame.transform.scale(medoc, (SPRITE_SIZE, SPRITE_SIZE))
-    block = pygame.image.load(MUR).convert()
-
-    # auto-generate Maze
-    structure = generate_maze()
-    maze = Maze(structure)
-    # Create Wall
-    maze.blit_walls(window)
-
-    # Create MacGyver
-    myplayer = Player(maze)
-
-    # Create Medoc
-    guard = Guard(maze)
-    guard.set_guard_position()
-
-    # Randomly position items in the maze
-    item = Item(maze)
-    item.itemPosition()
-    item.displayItems(myplayer, window)
-
-    # Guard kill count
-    guard_killed = 0
-    # Ture  condition for wile loop
-    done = 1
-    direction = None
-    count = 0
-    while done:
-        count += 1
-        x = myplayer.player_position[0]
-        y = myplayer.player_position[1]
-        # pygame.time.Clock().tick(10)
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                sys.exit()
-
-            # Direction key for Macgyver
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    direction ='up'
-
-                elif event.key == pygame.K_DOWN:
-                    direction = 'down'
-
-                elif event.key == pygame.K_RIGHT:
-                   direction ='right'
-
-                elif event.key == pygame.K_LEFT:
-                    direction ='left'
-            if event.type == pygame.KEYUP:
-                if (event.key == pygame.K_UP or event.key == pygame.K_DOWN or
-                    event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT):
-                    direction = None
-        myplayer.move(direction)
-        if count % 3:
-            guard.set_guard_position()
-            count -= 2
-        # New positions to be displayed on screen
-        window.blit(fond, (0, 0))
+    # Initiate the maze
+    while initiate:
+        # auto-generate Maze
+        structure = generate_maze()
+        maze = Maze(structure)
+        # Create Wall
         maze.blit_walls(window)
-        item.displayItems(myplayer, window)
-        window.blit(macgyver, myplayer.player_position)
-        # Hide Medoc if he contacts with MacGyver
-        if guard.guard_position == myplayer.player_position:
-            guard_killed = 1
-
-        if not guard_killed:
-            # Hide exit
-            window.blit(medoc, guard.guard_position)
-
-        pygame.display.flip()
-        pygame.time.Clock().tick(10)
-
-        if guard.guard_position == myplayer.player_position and item.score != 3:
-            go = 1
-            # Only display Medoc if he wins
-            window.blit(medoc, guard.guard_position)
-            while go:
-                for event in pygame.event.get():
-                    text = font.render('YOU LOST!!', True, (255, 11, 21))
-
-                    window.blit(text, ((SCREEN_SIZE - text.get_width()) // 2,
-                                       (SCREEN_SIZE - text.get_height()) // 2))
-                    pygame.display.flip()
-
-                    if event.type == KEYDOWN and event.key == K_RETURN:
-                        go = 0
-                    elif event.type == QUIT:
-                        sys.exit()
-            done = 0
-        # create exit
-        if guard_killed and item.score == 3:
-            strucutre = maze.structure[13][14] = 'e'
-            Maze(structure)
-
-        # Game closes if MacGyver finds exit
-        if maze.exit_position == myplayer.player_position and item.score == 3:
-            go = 1
-            while go:
-                for event in pygame.event.get():
-                    text = font.render('YOU WON!!', True, (11, 19, 255))
-
-                    window.blit(text, ((SCREEN_SIZE - text.get_width()) // 2,
-                                       (SCREEN_SIZE - text.get_height()) // 2))
-                    pygame.display.flip()
-                    if event.type == KEYDOWN and event.key == K_RETURN:
-                        go = 0
-                    elif event.type == QUIT:
-                        sys.exit()
-
-            done = 0
-
-
-
-
-
+        # Create MacGyver
+        myplayer = Player(maze)
+        # Create Medoc
+        guard = Guard(maze)
+        guard.set_guard_position()
+        # Randomly position items in the maze
+        item = Item(maze)
+        item.set_item_positions()
+        # Guard kill count
+        guard_killed = 0
+        # Ture  condition for wile loop
+        done = 1
+        direction = None
+        count = 0
+        while done:
+            count += 1
+            x = myplayer.player_position[0]
+            y = myplayer.player_position[1]
+            # pygame.time.Clock().tick(10)
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    sys.exit()
+                # Direction key for Macgyver
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        direction ='up'
+                    elif event.key == pygame.K_DOWN:
+                        direction = 'down'
+                    elif event.key == pygame.K_RIGHT:
+                       direction ='right'
+                    elif event.key == pygame.K_LEFT:
+                        direction ='left'
+                if event.type == pygame.KEYUP:
+                    if (event.key == pygame.K_UP or event.key == pygame.K_DOWN or
+                        event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT):
+                        direction = None
+            myplayer.move(direction)
+            if mode == 'easy':
+                if not count % 3: # speed of gau
+                    guard.set_guard_position()
+                    count = 0
+            elif mode == 'hard':
+                if count % 2:
+                    guard.set_guard_position()
+                    count = 0
+            # New positions to be displayed on screen
+            window.blit(fond, (0, 0))
+            maze.blit_walls(window)
+            item.display_items(myplayer.player_position, window)
+            window.blit(macgyver, myplayer.player_position)
+            # Hide Medoc if he contacts with MacGyver
+            if item.score == 3 and not guard_killed:
+                window.blit(sirynge, myplayer.player_position)
+            if not guard_killed:
+                # Display guard if he is not killed yet
+                window.blit(medoc, guard.guard_position)
+            if guard.guard_position == myplayer.player_position:
+                if item.score != 3:
+                    end = 1
+                    while end:
+                        for event in pygame.event.get():
+                            window.blit(loose,(0,0))
+                            pygame.display.flip()
+                            if event.type == KEYDOWN:
+                                if event.key == K_RETURN:
+                                    end = 0
+                                elif event.key == K_ESCAPE:
+                                    end = 0
+                                    initiate = 0
+                            if event.type == QUIT:
+                                sys.exit()
+                    done = 0
+                elif item.score == 3:
+                    guard_killed = 1
+                    # create exit door
+                    maze.structure[13][14] = 'e'
+            # Game closes if MacGyver finds exit
+            if maze.exit_position == myplayer.player_position and item.score == 3:
+                end = 1
+                while end:
+                    for event in pygame.event.get():
+                        window.blit(win,(0,0))
+                        pygame.display.flip()
+                        if event.type == KEYDOWN:
+                            if event.key == K_RETURN:
+                                end = 0
+                            elif event.key == K_ESCAPE:
+                                end = 0
+                                initiate = 0
+                        if event.type == QUIT:
+                            sys.exit()
+                done = 0
+            pygame.display.flip()
+            pygame.time.Clock().tick(10)

@@ -7,11 +7,13 @@ In order to escape from a Labyrinthe you must fabricate a syringe by collecting 
 ## Built with
 - Python 3.7
 - Pygame 1.9.4
+<!-- - Music by [NESJukebox](https://www.youtube.com/watch?v=LGKr210r_Fc) -->
+- 2D ART by [Chris Hamons](https://opengameart.org/content/dungeon-crawl-32x32-tiles-supplemental)
 
 ## Installation
 1. Install [python3](https://www.python.org/downloads/)
 2. Create a [virtual environment](https://docs.python.org/3/library/venv.html) (optional but reommended)
 3. Install the package
     `pip install -r requirements.txt`
-4. run start.py
+4. Run start.py
     `python3 start.py`

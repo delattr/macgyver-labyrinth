@@ -1,15 +1,21 @@
 # constante variables
+import os
 SPRITE_SIZE = 32 # image size in pixels
 TILE = 15        # number of sprites per row
 SCREEN_SIZE = int(TILE * SPRITE_SIZE) # toal length of screen size in pixels
-START = 'images/depart.png'
-FOND = 'images/fond.jpg'
-MUR = 'images/mur.png'
-ICON = 'images/dk_bas.png'
-MACGYVER = 'images/macgyver.png'
-ARROW = 'images/arrow.png'
-ETHER = 'images/ether.png'
-TUBE = 'images/tube.png'
-EXIT = 'images/exit.png'
-GARDIEN = 'images/gardien.png'
-FINISH = 'images/finish.png'
+START = os.path.join('images', 'depart.png')
+FOND = os.path.join('images', 'fond.jpg')
+MUR = os.path.join('images', 'mur.png')
+ICON = os.path.join('images', 'dk_bas.png')
+MACGYVER = os.path.join('images', 'macgyver.png')
+ARROW = os.path.join('images', 'arrow.png')
+ETHER = os.path.join('images', 'ether.png')
+TUBE = os.path.join('images', 'tube.png')
+EXIT = os.path.join('images', 'exit.png')
+GARDIEN = os.path.join('images', 'gardien.png')
+FINISH = os.path.join('images', 'finish.png')
+SIRYNGE = os.path.join('images', 'sirynge.png')
+WIN = os.path.join('images', 'win.png')
+LOOSE = os.path.join('images','loose.png')
+WELCOME = os.path.join('images','welcome.gif')
+MUSIC = os.path.join('music','bg-music.mp3')

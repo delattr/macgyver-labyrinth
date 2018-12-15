@@ -89,50 +89,50 @@ class Guard:
 # Randomly create postion of items
 class Item:
 
-    def __init__(self, maze,):
-        self.maze = maze
+    def __init__(self, maze):
+        self.corridor = maze.corridor
         self.score = 0
 
-        item1 = pygame.image.load(ARROW).convert_alpha()
-        item2 = pygame.image.load(TUBE).convert_alpha()
-        item3 = pygame.image.load(ETHER).convert_alpha()
 
-        self.item_name = [item1, item2, item3]
-        self.item_position = []
-        self.items_picked_up = []
+        arrow = pygame.image.load(ARROW).convert_alpha()
+        tube = pygame.image.load(TUBE).convert_alpha()
+        ether = pygame.image.load(ETHER).convert_alpha()
 
-    def itemPosition(self):
-        for i in range(len(self.item_name)):
-            item = random.choice(self.maze.corridor)
-            self.item_position.append(item)
-            self.maze.corridor.remove(item)
+        self.items= [arrow,tube,ether]
+        self.item_positions =[]
+        self.items_obtained = []
 
-    def displayItems(self, player, window):
+    def set_item_positions(self):
+        for index in enumerate(self.items):
+            item = random.choice(self.corridor)
+            self.corridor.remove(item)
+            self.item_positions.append(item)
 
-        self.player = player
+    def display_items(self, player_position, window):
+
+        self.player_position = player_position
         self.window = window
 
-        item_obtained = False
-        for i in range(len(self.item_position)):
+        for index, value in enumerate(self.items) :
             # Matching item name and position from two lists and display them on the screen
-            self.window.blit(self.item_name[i], self.item_position[i])
-            # Setting name and position of item obtained to a variable
-            if self.player.player_position == self.item_position[i]:
-                del_item_position = self.item_position[i]
-                del_item_name = self.item_name[i]
-                # Passes item picked up to a new list in order
-                self.items_picked_up.append(del_item_name)
-                # tracks the score
-                self.score += 1
-                item_obtained = True
-        # Removes item obtained from the lists
-        if item_obtained:
-            self.item_position.remove(del_item_position)
-            self.item_name.remove(del_item_name)
+            self.window.blit(value, self.item_positions[index])
 
-        # Display Items obtained on score board
-        for i in range(len(self.items_picked_up)):
-            self.window.blit(self.items_picked_up[i], (SPRITE_SIZE * i, SCREEN_SIZE))
+        # Check if player has obtained an item
+        if self.player_position in self.item_positions:
+                # Find index number of the item postion
+                for i,v in enumerate(self.item_positions):
+                    if v == self.player_position:
+                        # append the item to self.items_obtained
+                        self.items_obtained.append(self.items[i])
+                        # Remove the item from self.items
+                        del self.items[i]
+                self.item_positions.remove(self.player_position)
+                self.score += 1
+
+        if self.items_obtained:
+            #Display Items obtained on the score board
+            for index, value in enumerate(self.items_obtained) :
+                self.window.blit(value, (SPRITE_SIZE * index, SCREEN_SIZE))
         # Displays a finish.png on score board
         if self.score == 3:
             end = pygame.image.load(FINISH).convert()
