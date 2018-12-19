@@ -7,7 +7,7 @@ In order to escape from a Labyrinthe you must fabricate a syringe by collecting 
 ## Built with
 - Python 3.7
 - Pygame 1.9.4
-<!-- - Music by [NESJukebox](https://www.youtube.com/watch?v=LGKr210r_Fc) -->
+- Music by [NESJukebox](https://www.youtube.com/watch?v=LGKr210r_Fc)
 - 2D ART by [Chris Hamons](https://opengameart.org/content/dungeon-crawl-32x32-tiles-supplemental)
 
 ## Installation
