@@ -54,34 +54,32 @@ class Guard:
 
     def set_guard_position(self):
 
-
-        # corridor list contains open areas in pixel
-
-
-        # index of exit in the structure list
+        # Coordinate of guard in pixels
         x = int(self.guard_position[0])
         y = int(self.guard_position[1])
 
-        #check premisis
+        # Check coordinates of neighbouring blocks
         up = (x, y - SPRITE_SIZE)
         down = (x, y + SPRITE_SIZE)
         left = (x - SPRITE_SIZE, y)
         right = (x + SPRITE_SIZE, y)
-        # adjacent_cells
-        neighbours =[up,down,left,right]
-        #find an opened area
+        neighbours =[up, down, left, right]
+        # Find adjacent cells available
         adjacent_cells = [x for x in neighbours if x in self.unvisited]
         if not self.unvisited:
             self.unvisited = self.visited
             self.visited = set()
         if adjacent_cells:
-            #Push the current_position to the stack
+            # Push the current position to the stack
             self.stack.append(self.guard_position)
+            # Select next block to move
             next_cell = random.choice(adjacent_cells)
+            # Mark next block as visited
             self.unvisited.remove(next_cell)
             self.visited.add(next_cell)
-            # move to that direction
-            self.guard_position = (next_cell[0], next_cell[1])
+            # Move to next block
+            self.guard_position = (next_cell)
+        # If there are no adjacet cells and stack is not empty
         elif self.stack:
             last_cell = self.stack.pop()
             self.guard_position = last_cell
@@ -181,4 +179,6 @@ class Player:
                 if self.maze.structure[row][column - 1] != "x":
                     x_axis -= SPRITE_SIZE
                     self.player_position = (x_axis, y_axis)
+        elif direction == None:
+             return self.player_position
         return self.player_position

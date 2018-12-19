@@ -96,13 +96,19 @@ while 1:
                        direction ='right'
                     elif event.key == pygame.K_LEFT:
                         direction ='left'
+                    elif event.key == pygame.K_ESCAPE:
+                        # Display welcome screen
+                        initiate = 0
+                        done = 0
                 if event.type == pygame.KEYUP:
                     if (event.key == pygame.K_UP or event.key == pygame.K_DOWN or
                         event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT):
                         direction = None
+            # Set Player.player_postion
             myplayer.move(direction)
+            # Varying the frequency of updating guard position to controll the game difficulty
             if mode == 'easy':
-                if not count % 3: # speed of gau
+                if not count % 3:
                     guard.set_guard_position()
                     count = 0
             elif mode == 'hard':
@@ -114,13 +120,19 @@ while 1:
             maze.blit_walls(window)
             item.display_items(myplayer.player_position, window)
             window.blit(macgyver, myplayer.player_position)
-            # Hide Medoc if he contacts with MacGyver
-            if item.score == 3 and not guard_killed:
-                window.blit(sirynge, myplayer.player_position)
+            # Hide Medoc if he's not been contacted by MacGyver
             if not guard_killed:
-                # Display guard if he is not killed yet
                 window.blit(medoc, guard.guard_position)
+            # If guard is killed and player obtains all items
+                if item.score == 3:
+                    window.blit(sirynge, myplayer.player_position)
+
+            pygame.display.flip()
+
+
+            # Gaurd contacted by Player
             if guard.guard_position == myplayer.player_position:
+                # Player losses the game
                 if item.score != 3:
                     end = 1
                     while end:
@@ -131,16 +143,18 @@ while 1:
                                 if event.key == K_RETURN:
                                     end = 0
                                 elif event.key == K_ESCAPE:
-                                    end = 0
                                     initiate = 0
+                                    end = 0
                             if event.type == QUIT:
                                 sys.exit()
                     done = 0
+                # Player kills the guard
                 elif item.score == 3:
                     guard_killed = 1
-                    # create exit door
+                    # Open exit route
                     maze.structure[13][14] = 'e'
-            # Game closes if MacGyver finds exit
+
+            # Conditions for wining the game
             if maze.exit_position == myplayer.player_position and item.score == 3:
                 end = 1
                 while end:
@@ -151,10 +165,9 @@ while 1:
                             if event.key == K_RETURN:
                                 end = 0
                             elif event.key == K_ESCAPE:
-                                end = 0
                                 initiate = 0
+                                end = 0
                         if event.type == QUIT:
                             sys.exit()
                 done = 0
-            pygame.display.flip()
             pygame.time.Clock().tick(10)
