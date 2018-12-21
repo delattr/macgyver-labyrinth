@@ -1,6 +1,6 @@
 import random
 import pygame
-from pygame.locals import *
+# from pygame.locals import *
 from constants import *
 
 
@@ -16,11 +16,12 @@ class Maze:
     # Generate maze by reading the text file
 
     def blit_walls(self, window):
+        """Draw Wall, depart, exit images on pygame surface"""
 
         wall = pygame.image.load(MUR).convert()
-        depart = pygame.image.load(START).convert()
-        sortie = pygame.image.load(EXIT).convert()
-
+        start = pygame.image.load(START).convert()
+        exit_door = pygame.image.load(EXIT).convert()
+        self.window = window
         row = 0
         for line in self.structure:
             column = 0
@@ -28,21 +29,22 @@ class Maze:
                 y = row * SPRITE_SIZE
                 x = column * SPRITE_SIZE
                 if letter == 'x':    # x = wall
-                    window.blit(wall, (x, y))
+                    self.window.blit(wall, (x, y))
                 elif letter == 's':  # s = starting postion
-                    window.blit(depart, (x, y))
+                    self.window.blit(start, (x, y))
                     self.starting_position = (x, y)
                 elif letter == 'o':  # 0 = corridor
                     self.corridor.append((x, y)) # Contains open areas
                 elif letter == 'e':
-                    window.blit(sortie, (x, y))
+                    self.window.blit(exit_door, (x, y))
                     self.exit_position = (x, y)
                 column += 1
             row += 1
 
 
-# Determine position of the guard
+
 class Guard:
+    """Determine position of the guard"""
 
     def __init__(self, maze):
         self.maze = maze
@@ -53,6 +55,7 @@ class Guard:
         self.visited = set()
 
     def set_guard_position(self):
+        """Set guard coordiates in pixel"""
 
         # Coordinate of guard in pixels
         x = int(self.guard_position[0])
@@ -84,29 +87,33 @@ class Guard:
             last_cell = self.stack.pop()
             self.guard_position = last_cell
 
-# Randomly create postion of items
+
 class Item:
+    """Randomly create postion of items"""
 
     def __init__(self, maze):
         self.corridor = maze.corridor
         self.score = 0
 
 
-        arrow = pygame.image.load(ARROW).convert_alpha()
+        niddle = pygame.image.load(NIDDLE).convert_alpha()
         tube = pygame.image.load(TUBE).convert_alpha()
         ether = pygame.image.load(ETHER).convert_alpha()
 
-        self.items= [arrow,tube,ether]
+        self.items= [niddle,tube,ether]
         self.item_positions =[]
         self.items_obtained = []
 
     def set_item_positions(self):
+        """Set initial positions of items in random"""
+
         for index in enumerate(self.items):
             item = random.choice(self.corridor)
             self.corridor.remove(item)
             self.item_positions.append(item)
 
     def display_items(self, player_position, window):
+        """Display items on the surface"""
 
         self.player_position = player_position
         self.window = window
@@ -138,6 +145,7 @@ class Item:
 
 
 class Player:
+    """Player object"""
 
     def __init__(self, maze):
         # position of player in terms of coordiates and pixels
@@ -145,6 +153,8 @@ class Player:
         self.player_position = self.maze.starting_position
 
     def move(self, direction):
+        """Collision detection for the player object"""
+
         # Calculate opstion of player in coordiates and pixels
         row = int(self.player_position[1] / SPRITE_SIZE)
         column = int(self.player_position[0] / SPRITE_SIZE)
