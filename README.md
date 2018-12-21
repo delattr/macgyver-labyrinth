@@ -19,8 +19,8 @@ In order to escape from a Labyrinthe you must fabricate a syringe by collecting 
     `python3 start.py`
 
 ## Screenshots
-[screenshot](./images/screenshot_1.jpg)
-[Game Play](./images/screenshot_2.jpg)
+[screenshot](/images/screenshot_1.jpg)
+[Game Play](/images/screenshot_2.jpg)
 
 ## Updates
 *12.20.2018*
