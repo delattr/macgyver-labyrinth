@@ -1,17 +1,17 @@
 from constants import *
 import random
 
+block = 'x'
+cell = 'o'
+start = 's'
+visited_cells = set()
+unvisited_cells = set()
+stack = []
+
+
 def generate_maze():
 
     # Generate initial cell blocks for auto generation:
-    block = 'x'
-    cell = 'o'
-    start = 's'
-
-    visited_cells = set()
-    unvisited_cells = set()
-    stack = []
-
     structure = []
     for y in range(0,TILE):          # TILE == maximum number of sprites for y-axis
         line =[]
@@ -67,8 +67,8 @@ def generate_maze():
             # Make the chosen cell the current cell and mark it as visited
             visited_cells.add(current_cell)
             current_cell = next_cell
-         # Else if stack is not empty
-        elif stack:
+        # Else if stack is not empty
+        elif unvisited_cells and stack:
              # Pop a cell from the stack
              last_cell = stack.pop()
              # Make it the current cell
