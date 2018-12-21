@@ -17,3 +17,17 @@ In order to escape from a Labyrinthe you must fabricate a syringe by collecting 
     `pip install -r requirements.txt`
 4. Run start.py
     `python3 start.py`
+
+## Screenshots
+[screenshot](./images/screenshot_1.jpg)
+[Game Play](./images/screenshot_2.jpg)
+
+## Updates
+*12.20.2018*
+- Added background music
+- Added hard mode
+- Added introduction screen
+- Maze auto-generates
+- Infinite levels
+- Medoc moves aroud the maze
+- Graphic updates
