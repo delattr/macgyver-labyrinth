@@ -30,7 +30,7 @@ macgyver = pygame.transform.scale(macgyver, (SPRITE_SIZE, SPRITE_SIZE))
 medoc = pygame.image.load(GARDIEN).convert_alpha()
 medoc = pygame.transform.scale(medoc, (SPRITE_SIZE, SPRITE_SIZE))
 block = pygame.image.load(MUR).convert()
-sirynge = pygame.image.load(SIRYNGE).convert()
+syringe = pygame.image.load(SYRINGE).convert()
 win = pygame.image.load(WIN).convert()
 loose = pygame.image.load(LOOSE).convert()
 welcome = pygame.image.load(WELCOME).convert()
@@ -125,7 +125,7 @@ while 1:
                 window.blit(medoc, guard.guard_position)
             # If guard is killed and player obtains all items
                 if item.score == 3:
-                    window.blit(sirynge, myplayer.player_position)
+                    window.blit(syringe, myplayer.player_position)
 
             pygame.display.flip()
 
