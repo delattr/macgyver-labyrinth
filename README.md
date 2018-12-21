@@ -20,7 +20,7 @@ In order to escape from a Labyrinthe you must fabricate a syringe by collecting 
 
 ## Screenshots
 ![screenshot](/images/screenshot_1.jpg?raw=true "Intro")
-![Game Play](/images/screenshot_2.jpg?raw=true "Game play")
+![Game Play](/images/screenshot_2.gif?raw=true "Game play")
 
 ## Updates
 *12.20.2018*
