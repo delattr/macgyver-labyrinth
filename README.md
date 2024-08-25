@@ -2,7 +2,7 @@
 
 [MacGyver](https://youtu.be/yOEe1uzurKo) is trapped in a labyrinth with [Murdoc](https://en.wikipedia.org/wiki/Murdoc) !
 
-In order to escape from a Labyrinthe you must fabricate a syringe by collecting three items and neutralize Murdoc who is gaurding the escape door.
+In order to escape from the Labyrinthe you must fabricate a syringe by collecting three items and neutralize Murdoc who is gaurding the escape door.
 
 ## Built with
 - Python 3.7
